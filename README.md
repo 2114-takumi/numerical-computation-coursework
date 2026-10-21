@@ -9,23 +9,35 @@ PDFの表示と転記したコードを照合し、アルゴリズムや変数�
 | レポート | 課題番号・課題名 | 言語 | アルゴリズム | ソースコード | 解説 |
 | --- | --- | --- | --- | --- | --- |
 | 第2回 | 課題1・行列の積（3×3行列） | C | 三重ループによる行列積 | [matrix_multiplication.c](report_02/matrix_multiplication.c) | [第2回レポートのREADME](report_02/README.md) |
+| 第3回 | 3.1節・二分法（Listing 1） | C | 符号判定による区間の二分 | [bisection.c](report_03/bisection.c) | [第3回レポートのREADME](report_03/README.md) |
+| 第3回 | 3.2節・ニュートン法（Listing 2） | C | 導関数を使う逐次近似 | [newton_method.c](report_03/newton_method.c) | [第3回レポートのREADME](report_03/README.md) |
+| 第6回 | 第1節・演習問題3.5 | C | 差商表とニュートン補間多項式の評価 | [newton_interpolation.c](report_06/newton_interpolation.c) | [第6回レポートのREADME](report_06/README.md) |
+| 第6回 | 第2節・プログラム3.2の36～48行 | C（抜粋） | 差商公式による補間多項式の評価 | [newhkn_lines_36_48.c](report_06/newhkn_lines_36_48.c) | [第6回レポートのREADME](report_06/README.md) |
+| 中間 | 設問(2) | C | 面積二等分に対応する方程式のニュートン法 | [newton_area_equation.c](midterm_report/newton_area_equation.c) | [中間レポートのREADME](midterm_report/README.md) |
+| 中間 | 設問(4) | C | 複数初期値からのニュートン法・収束先の比較 | [newton_initial_values.c](midterm_report/newton_initial_values.c) | [中間レポートのREADME](midterm_report/README.md) |
 
-行列積では、結果の各要素を「左の行列の行」と「右の行列の列」の積和として求めます。復元したプログラムでは、三重ループによって3×3行列の積を計算します。一般のn×n行列に同じ計算法を用いた場合、計算量はO(n³)です。計算式、各ループと変数の役割、レポートに掲載された実行結果は、第2回レポートのREADMEで説明しています。
+復元した内容には、三重ループによる行列積、非線形方程式の数値解法と収束の比較、差商を使う補間、ニュートン法の初期値による収束先の変化があります。計算式、処理手順、変数の役割、掲載された実行結果は各レポートのREADMEで説明しています。
+
+第3回には独立した課題番号がないため、元の節・リスト番号で整理しています。第6回の `newhkn_lines_36_48.c` は掲載された13行だけを保存した抜粋であり、プログラム全体を復元したものではありません。中間レポートは番号付きの通常回と区別して `midterm_report/` に保存しています。
 
 ## 必要な環境と確認状況
 
-- C99以降に対応したCコンパイラが必要です。プログラムでは`for`文の初期化部分で変数を宣言しています。
-- 使用するヘッダは標準ライブラリの`stdio.h`です。数学ライブラリをリンクする`-lm`オプションは不要です。
-- コンパイル・実行：**未検証（Cコンパイラ未導入）**。
+- C99以降に対応したCコンパイラを想定しています。一部のソースは`for`文での変数宣言や、処理の途中での変数宣言を使用します。
+- 第2回と第6回の完全なプログラムは`stdio.h`だけを使用し、数学ライブラリの追加リンクは不要です。第3回と中間レポートは`math.h`も使用し、GCC系では数学ライブラリをリンクする`-lm`を付けます。
+- 全Cファイルのコンパイル・実行は**未検証（Cコンパイラ未導入）**です。第6回の13行の抜粋は単独ではコンパイル・実行できません。
+- Python 3.12.15で独立した数値の補助確認を行い、確認した範囲の掲載値と一致しました。Cコードの実行確認とは区別し、入力条件・一致した桁数・確認対象を各READMEに記載しています。
 
-GCCが利用できる環境では、リポジトリのルートで次のようにコンパイルできます。このコマンドは実行例であり、この作業環境では未確認です。
+第3回には原本由来の不正なエスケープや未初期化変数があり、修正せず保存しています。中間レポートの改行表記は、元のソースが`\n`だったというユーザーの回答に基づいて復元しました。各READMEの照合記録と注意点を参照してください。
 
-```sh
-gcc -std=c99 report_02/matrix_multiplication.c -o matrix_multiplication
-./matrix_multiplication
+GCCが利用できる場合の参考として、リポジトリのルートでのPowerShell用コマンドを示します。この作業環境では未実行です。他のソースの手順と入力条件は各READMEにあります。
+
+```powershell
+New-Item -ItemType Directory -Path build -Force | Out-Null
+gcc -std=c99 -Wall -Wextra -pedantic .\report_02\matrix_multiplication.c -o .\build\matrix_multiplication.exe
+.\build\matrix_multiplication.exe
 ```
 
-Windowsでは生成された`matrix_multiplication.exe`を`./matrix_multiplication.exe`で実行します。コンパイル時や実行時に問題が見つかった場合も、原本のコードは変更せず、確認内容を各レポートのREADMEに記録します。
+複数の完全なプログラムはそれぞれ`main`を持つため、ファイルごとにコンパイルします。コンパイル時や実行時に問題が見つかった場合も、原本のコードは変更せず、確認内容を各レポートのREADMEに記録します。検証用の実行ファイルや一時ファイルはGit管理から除外しています。
 
 ## 今後の追加
 
